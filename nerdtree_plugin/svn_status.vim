@@ -63,6 +63,11 @@ function! NERDTreeSvnStatusRefreshListener(event)
     endif
 endfunction
 
+" FUNCTION: s:NERDTreeStripString() {{{2
+function! s:NERDTreeStripString(input_string)
+    return substitute(a:input_string, '^\s*\(.\{-}\)\s*$', '\1', '')
+endfunction
+
 " FUNCTION: g:NERDTreeSvnStatusRefresh() {{{2
 " refresh cached svn status
 function! g:NERDTreeSvnStatusRefresh()
@@ -100,6 +105,8 @@ function! g:NERDTreeSvnStatusRefresh()
         if l:pathStr =~# '\.\./.*'
             continue
         endif
+
+        let l:pathStr = s:NERDTreeStripString(l:pathStr)
         let l:statusKey = s:NERDTreeGetFileSvnStatusKey(l:statusLine[0], l:statusLine[1])
         let b:NERDTreeCachedSvnFileStatus[fnameescape(l:pathStr)] = l:statusKey
 
